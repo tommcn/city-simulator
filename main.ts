@@ -1,4 +1,4 @@
-import { TemperatureSensor } from "./things/thing";
+import { TemperatureSensor } from "./things/temperatureSensor";
 
 const t = new TemperatureSensor();
 
@@ -20,5 +20,6 @@ for (let i = 0; i < 10; i++) {
         console.log("Some sensors failed");
     } else {
         console.log("All sensors succeeded");
+        console.log(t.interpretResults([1, 2, 4, 65, 12]));
     }
 })();
