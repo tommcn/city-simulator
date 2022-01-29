@@ -1,11 +1,20 @@
-import { PresenceSensor, TemperatureSensor, Sensor } from "./things";
+import {
+    PresenceSensor,
+    TemperatureSensor,
+    StreetlightActor,
+    Sensor,
+    Actor,
+} from "./things";
 
 const sensors: Sensor[] = [];
+const actors: StreetlightActor[] = [];
 
 for (let i = 0; i < 10; i++) {
     sensors.push(new TemperatureSensor());
     sensors.push(new PresenceSensor());
 }
+
+actors.push(new StreetlightActor());
 
 (async () => {
     // Run all ticks at the same time
@@ -20,4 +29,6 @@ for (let i = 0; i < 10; i++) {
     } else {
         console.log("All sensors succeeded");
     }
+
+    await Promise.all(actors.map((actor) => actor.turnOn()));
 })();
