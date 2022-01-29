@@ -2,6 +2,9 @@ import { sleep } from "./helpers";
 import { Sensor } from "./thing";
 
 export class TemperatureSensor extends Sensor {
+    /**
+     * The temperature as read by the sensor in degrees Celsius
+     */
     temperature: number;
 
     constructor() {
