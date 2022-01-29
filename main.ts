@@ -1,11 +1,10 @@
-import { TemperatureSensor } from "./things/temperatureSensor";
+import { PresenceSensor, TemperatureSensor, Sensor } from "./things";
 
-const t = new TemperatureSensor();
-
-const sensors: TemperatureSensor[] = [];
+const sensors: Sensor[] = [];
 
 for (let i = 0; i < 10; i++) {
     sensors.push(new TemperatureSensor());
+    sensors.push(new PresenceSensor());
 }
 
 (async () => {
@@ -20,6 +19,5 @@ for (let i = 0; i < 10; i++) {
         console.log("Some sensors failed");
     } else {
         console.log("All sensors succeeded");
-        console.log(t.interpretResults([1, 2, 4, 65, 12]));
     }
 })();

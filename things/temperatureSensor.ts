@@ -30,10 +30,10 @@ export class TemperatureSensor extends Sensor {
      * @returns A human-readable interpretation of the results
      */
     public interpretResults(results: number[]): string[] {
-        const intepretation: string[] = results.map(
+        const intepretations: string[] = results.map(
             (el) => `Temperature: ${el} °C`
         );
-        return intepretation;
+        return intepretations;
     }
 
     public get value(): number {

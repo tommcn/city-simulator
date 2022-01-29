@@ -14,7 +14,7 @@ export abstract class Sensor extends Thing {
         super();
     }
 
-    public abstract get value(): number;
+    public abstract get value(): number | boolean;
 }
 
 export abstract class Actor extends Thing {
