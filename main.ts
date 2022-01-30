@@ -47,7 +47,7 @@ actors.push(new LightActor());
         console.clear();
         for (const sl of sls) {
             sl.tick();
-            console.log(`${sl._id}\t${sl.on}`);
+            // console.log(`${sl._id}\t${sl.on}`);
         }
     }
 })();
