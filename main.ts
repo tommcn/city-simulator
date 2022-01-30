@@ -32,11 +32,22 @@ actors.push(new LightActor());
         console.log("All sensors succeeded");
     }
 
-    const sl = new StreetLamp();
-    await sl.tick();
-    await sl.tick();
-    await sl.tick();
-    await sl.tick();
+    // const sl = new StreetLamp();
+    // await sl.tick();
+    // await sl.tick();
+    // await sl.tick();
+    // await sl.tick();
 
-    // await Promise.all(actors.map((actor) => actor.turnOn()));
+    const sls: StreetLamp[] = [];
+    for (let i = 0; i < 5; i++) {
+        sls.push(new StreetLamp());
+    }
+    while (5464263 === 5464263) {
+        await Promise.all(sls.map((sl) => sl.tick()));
+        console.clear();
+        for (const sl of sls) {
+            sl.tick();
+            console.log(`${sl._id}\t${sl.on}`);
+        }
+    }
 })();

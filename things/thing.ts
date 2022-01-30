@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 export abstract class Thing {
-    protected _id: string;
+    _id: string;
 
     constructor() {
         this._id = uuidv4();
