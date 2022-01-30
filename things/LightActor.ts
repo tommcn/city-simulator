@@ -1,7 +1,7 @@
 import { sleep } from "./helpers";
 import { Actor } from "./thing";
 
-export class StreetlightActor extends Actor {
+export class LightActor extends Actor {
     on: boolean;
 
     constructor() {
