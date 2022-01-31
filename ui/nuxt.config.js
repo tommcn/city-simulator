@@ -55,12 +55,6 @@ export default {
         name: 'socket',
         url: 'http://localhost:8000',
         default: true,
-        vuex: {
-          namespace: 'socket',
-          mutations: [{
-            pong: "socket/PONG"
-          }]
-        }
       }
     ]
 

@@ -1,16 +1,30 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-list-item v-for="sl in sls" :key="sl._id" two-line>
-        <v-list-item-content>
-          <v-list-item-title>{{ sl._id }}</v-list-item-title>
-          <v-list-item-subtitle>{{
-            sl.on ? 'On' : 'Off'
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-    </v-col>
-  </v-row>
+  <div>
+    <v-row justify="center" align="center">
+      <v-col cols="12" sm="8" md="6">
+        <v-list dense>
+          <v-subheader>Streetlamps</v-subheader>
+          <v-list-item v-for="sl in sls" :key="sl._id" two-line>
+            <v-list-item-content>
+              <v-list-item-title>{{ sl._id }}</v-list-item-title>
+              <v-list-item-subtitle>{{
+                sl.on ? 'On' : 'Off'
+              }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-col>
+    </v-row>
+    <v-snackbar v-model="snackbar.snackbar" :timeout="snackbar.timeout">
+      {{ snackbar.text }}
+
+      <template #action="{ attrs }">
+        <v-btn text v-bind="attrs" @click="snackbar.snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+  </div>
 </template>
 
 <script>
@@ -19,6 +33,11 @@ export default {
   data: () => ({
     message: 'Hello World',
     sls: [],
+    snackbar: {
+      snackbar: false,
+      text: 'Hello, world👋 🌏 !',
+      timeout: 2000,
+    },
   }),
   head: {
     title: 'Home Page',
@@ -27,12 +46,18 @@ export default {
     this.socket = this.$nuxtSocket({
       name: 'server',
       channel: '/',
+    }) // TODO: figure out reconnection
+
+    this.socket.on('connect', () => {
+      this.snackbar.text = 'Connected'
+      this.snackbar.snackbar = true
     })
-    this.socket.on('pong', (msg) => {
-      console.log('pong', msg)
+    this.socket.on('disconnect', () => {
+      this.snackbar.text = 'Disconnected'
+      this.snackbar.snackbar = true
     })
+
     this.socket.on('tick', (data) => {
-      console.log('Got data from server:', data)
       this.sls = data.sls
     })
     await this.ping()
