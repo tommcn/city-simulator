@@ -32,9 +32,9 @@ actors.push(new LightActor());
     } else {
         console.log("All sensors succeeded");
     }
-
-    const sl = new StreetLamp();
 })();
+
+const sl = new StreetLamp();
 
 const io = new Server({
     cors: {
@@ -49,6 +49,10 @@ io.on("connection", (socket) => {
         console.log("ping", data);
         socket.emit("pong", data);
     });
+    setInterval(async () => {
+        await sl.tick();
+        socket.emit("tick", { sls: [sl] });
+    }, 0.1 * 1000);
 });
 
 io.listen(8000);
