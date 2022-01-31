@@ -15,7 +15,13 @@
         </v-list>
       </v-col>
     </v-row>
-    <v-snackbar v-model="snackbar.snackbar" :timeout="snackbar.timeout">
+    <v-snackbar
+      v-model="snackbar.snackbar"
+      :timeout="snackbar.timeout"
+      :color="snackbar.type"
+      right
+      top
+    >
       {{ snackbar.text }}
 
       <template #action="{ attrs }">
@@ -37,6 +43,7 @@ export default {
       snackbar: false,
       text: 'Hello, world👋 🌏 !',
       timeout: 2000,
+      type: 'info',
     },
   }),
   head: {
@@ -50,11 +57,14 @@ export default {
 
     this.socket.on('connect', () => {
       this.snackbar.text = 'Connected'
+      this.snackbar.type = 'success'
       this.snackbar.snackbar = true
     })
     this.socket.on('disconnect', () => {
       this.snackbar.text = 'Disconnected'
+      this.snackbar.type = 'error'
       this.snackbar.snackbar = true
+      this.sls = []
     })
 
     this.socket.on('tick', (data) => {
