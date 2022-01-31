@@ -1,5 +1,3 @@
-import colors from 'vuetify/es5/util/colors'
-
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -41,6 +39,8 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    // https://nuxt-socket-io.netlify.app
+    'nuxt-socket-io'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -49,22 +49,28 @@ export default {
     baseURL: '/',
   },
 
+  io: {
+    sockets: [
+      {
+        name: 'socket',
+        url: 'http://localhost:8000',
+        default: true,
+        vuex: {
+          namespace: 'socket',
+          mutations: [{
+            pong: "socket/PONG"
+          }]
+        }
+      }
+    ]
+
+  },
+
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
       dark: true,
-      themes: {
-        dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3,
-        },
-      },
     },
   },
 

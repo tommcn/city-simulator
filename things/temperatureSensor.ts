@@ -16,7 +16,7 @@ export class TemperatureSensor extends Sensor {
         const value = Math.floor(Math.random() * 100);
         this.temperature = value;
 
-        await sleep(1 * 1000); // Busy work
+        // await sleep(1 * 1000); // Busy work
 
         return true;
     }

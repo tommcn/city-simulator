@@ -6,6 +6,7 @@ import {
     Actor,
     StreetLamp,
 } from "./things";
+import { Server } from "socket.io";
 
 /* Bunch of sample code incoming, beware */
 const sensors: Sensor[] = [];
@@ -32,22 +33,22 @@ actors.push(new LightActor());
         console.log("All sensors succeeded");
     }
 
-    // const sl = new StreetLamp();
-    // await sl.tick();
-    // await sl.tick();
-    // await sl.tick();
-    // await sl.tick();
-
-    const sls: StreetLamp[] = [];
-    for (let i = 0; i < 5; i++) {
-        sls.push(new StreetLamp());
-    }
-    while (5464263 === 5464263) {
-        await Promise.all(sls.map((sl) => sl.tick()));
-        console.clear();
-        for (const sl of sls) {
-            sl.tick();
-            // console.log(`${sl._id}\t${sl.on}`);
-        }
-    }
+    const sl = new StreetLamp();
 })();
+
+const io = new Server({
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+    },
+});
+io.on("connection", (socket) => {
+    console.log("New connection:", socket.id);
+    socket.emit("hello", "world");
+    socket.on("ping", (data) => {
+        console.log("ping", data);
+        socket.emit("pong", data);
+    });
+});
+
+io.listen(8000);

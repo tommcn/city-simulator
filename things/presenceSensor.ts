@@ -16,7 +16,7 @@ export class PresenceSensor extends Sensor {
         const value = Math.random() < 0.5;
         this.presence = value;
 
-        await sleep(1 * 1000); // Busy work
+        // await sleep(1 * 1000); // Busy work
 
         return true;
     }
