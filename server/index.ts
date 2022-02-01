@@ -5,7 +5,7 @@ const sl = new StreetLamp();
 export function startServer(): void {
     const io = new Server({
         cors: {
-            origin: "http://localhost:3000",
+            origin: "*",
             methods: ["GET", "POST"],
         },
     });
@@ -26,5 +26,5 @@ export function startServer(): void {
         }, 0.1 * 1000);
     });
 
-    io.listen(8000);
+    io.listen(parseInt(process.env.PORT || "3000"));
 }
