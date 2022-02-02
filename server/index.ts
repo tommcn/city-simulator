@@ -1,7 +1,10 @@
 import { StreetLamp } from "../things";
 import { Server } from "socket.io";
 
-const sl = new StreetLamp();
+const devices = {
+    sls: [new StreetLamp(), new StreetLamp()],
+};
+
 export function startServer(): void {
     const io = new Server({
         cors: {
@@ -20,11 +23,24 @@ export function startServer(): void {
             socket.emit("pong", data);
         });
 
+        socket.on("addStreetlamp", (data) => {
+            devices.sls.push(new StreetLamp());
+            socket.emit("streetLampAdded");
+        });
+
+        socket.on("removeStreetlamp", (data) => {
+            devices.sls.pop();
+            socket.emit("streetLampRemoved");
+        });
+
         setInterval(async () => {
-            await sl.tick();
-            socket.emit("tick", { sls: [sl] });
+            const values = await Promise.all(
+                devices.sls.map((sl) => sl.tick())
+            );
+
+            socket.emit("tick", devices);
         }, 0.1 * 1000);
     });
 
-    io.listen(parseInt(process.env.PORT || "3000"));
+    io.listen(parseInt(process.env.PORT || "8000"));
 }
