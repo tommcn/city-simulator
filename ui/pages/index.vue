@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row justify="center" align="center">
+    <v-row justify="center">
       <v-col cols="12" sm="8" md="6">
         <v-hover v-slot="{ hover }">
           <v-sheet :elevation="hover ? 24 : 4" class="sheet">
@@ -13,6 +13,37 @@
                   }}</v-list-item-title>
                   <v-list-item-subtitle>{{
                     sl.on ? 'On' : 'Off'
+                  }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+            <v-divider />
+            <v-btn class="btn" color="primary" text @click="addStreetlamp"
+              >Add</v-btn
+            >
+            <v-btn
+              class="btn"
+              color="error"
+              text
+              outlined
+              @click="removeStreetlamp"
+              >Remove</v-btn
+            >
+          </v-sheet>
+        </v-hover>
+      </v-col>
+      <v-col cols="12" sm="8" md="6">
+        <v-hover v-slot="{ hover }">
+          <v-sheet :elevation="hover ? 24 : 4" class="sheet">
+            <v-list dense>
+              <v-subheader>Weather stations</v-subheader>
+              <v-list-item v-for="ws in wss" :key="ws._id" two-line>
+                <v-list-item-content>
+                  <v-list-item-title class="device-id">{{
+                    ws._id
+                  }}</v-list-item-title>
+                  <v-list-item-subtitle>{{
+                    ws.temperature
                   }}</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
@@ -57,6 +88,7 @@ export default {
   data: () => ({
     message: 'Hello World',
     sls: [],
+    wss: [],
     snackbar: {
       snackbar: false,
       text: 'Hello, world👋 🌏 !',
@@ -97,6 +129,7 @@ export default {
 
     this.socket.on('tick', (data) => {
       this.sls = data.sls
+      this.wss = data.wss
     })
     await this.ping()
   },

@@ -4,6 +4,7 @@ export * from "./thing";
 
 export * from "./presenceSensor";
 export * from "./temperatureSensor";
-export * from "./LightActor";
+export * from "./lightActor";
 
 export * from "./StreetlampDevice";
+export * from "./WeatherStationDevice";
