@@ -1,5 +1,3 @@
-import { Server } from "socket.io";
-
 import { StreetLamp } from "../things";
 import { WeatherStation } from "../things";
 import { saveDeviceState, setUp } from "./db";
@@ -11,13 +9,6 @@ const devices: Devices = {
 };
 
 export async function startServer(): Promise<void> {
-    const io = new Server({
-        cors: {
-            origin: "*",
-            methods: ["GET", "POST"],
-        },
-    });
-
     await setUp("user", "password", "org", "bucket");
     setInterval(async () => {
         const values = await Promise.all([

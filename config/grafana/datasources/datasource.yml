@@ -1,12 +1,16 @@
 apiVersion: 1
 
 datasources:
-  - name: InfluxDB
+  - name: influxdb
     type: influxdb
     access: proxy
-    database: bucket
-    user: user
-    password: password
     url: http://influxdb:8086
-    isDefault: true
-    editable: true
+    secureJsonData:
+      token: token
+    jsonData:
+      version: Flux
+      organization: org
+      defaultBucket: bucket
+      tlsSkipVerify: true
+
+    default: true
