@@ -8,12 +8,6 @@ services:
       - 8080:8080
     depends_on:
       - influxdb
-  ui:
-    build: ui
-    environment:
-      - PORT=8000
-    ports:
-      - 8000:8000
 
   influxdb:
     image: influxdb:latest
