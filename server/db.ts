@@ -6,14 +6,12 @@ import {
 } from "@influxdata/influxdb-client-apis";
 import { Devices } from "./types";
 
-// The token will change when initalizing the InfluxDB server in a new container
 const org = "org";
 const bucket = "bucket";
 const url = process.env.RUNNING_IN_CONTAINER
     ? "http://influxdb:8086"
     : "http://localhost:8086";
 var token = undefined as string | undefined;
-
 var client = undefined as InfluxDB | undefined;
 
 export async function setUp(
@@ -38,7 +36,7 @@ export async function setUp(
         console.log("Onboarding failed, signing in instead.");
         const signinAPI = new SigninAPI(new InfluxDB({ url }));
         const cookies = [] as (string | undefined)[];
-        const auths = await signinAPI.postSignin(
+        await signinAPI.postSignin(
             {
                 auth: { user: username, password },
             },
@@ -73,7 +71,7 @@ export async function setUp(
         url: url,
         token,
     });
-    console.log("\nGot token and created InfluxDB client.");
+    console.log("Got token and created InfluxDB client.");
     console.log("=".repeat(20), "InfluxDB Token", "=".repeat(20));
     console.log(token);
     console.log(
