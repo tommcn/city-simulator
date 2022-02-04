@@ -1,3 +1,8 @@
 devices:
   weather_stations:
     - name: Weather Station 1
+    - name: Weather Station 2
+
+  street_lights:
+    - name: Street Light 1
+    - name: Street Light 2
