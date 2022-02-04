@@ -32,6 +32,5 @@ actors.push(new LightActor());
     } else {
         console.log("All sensors succeeded");
     }
+    await startServer();
 })();
-
-startServer();

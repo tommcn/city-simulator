@@ -14,6 +14,16 @@
   dependencies:
     "@cspotcode/source-map-consumer" "0.8.0"
 
+"@influxdata/influxdb-client-apis@^1.22.0":
+  version "1.22.0"
+  resolved "https://registry.yarnpkg.com/@influxdata/influxdb-client-apis/-/influxdb-client-apis-1.22.0.tgz#25593fb8d35ad0e484115ae8d2eb17687f7f5e6a"
+  integrity sha512-q6vkO/N6ckMvL6ENclmu/8JjfcEJ5WFrWqgnB6SqBYz2YYWEdSNJtkpOqwVuL56Z92g7Cgr2O7nJ7CYVJvY2Ag==
+
+"@influxdata/influxdb-client@^1.22.0":
+  version "1.22.0"
+  resolved "https://registry.yarnpkg.com/@influxdata/influxdb-client/-/influxdb-client-1.22.0.tgz#9739888fd10923f4e5c4a1254b5eda171fcbfa05"
+  integrity sha512-kwJUPek/K3NEFbjWttQXd4sSyBXa3oxyzodkhZ0pXgiX6gBDYX6ny/YNZEr5uGeBBmBWvLZ4k9Ge3c5rPr5B2Q==
+
 "@socket.io/base64-arraybuffer@~1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@socket.io/base64-arraybuffer/-/base64-arraybuffer-1.0.2.tgz#568d9beae00b0d835f4f8c53fd55714986492e61"

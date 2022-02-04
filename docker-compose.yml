@@ -6,6 +6,8 @@ services:
       - PORT=8080
     ports:
       - 8080:8080
+    depends_on:
+      - influxdb
   ui:
     build: ui
     environment:
@@ -19,6 +21,7 @@ services:
       - 8086:8086
     volumes:
       - influxdb-storage:/var/lib/influxdb
+      - ./config/influxdb/config.yml:/etc/influxdb2/config.yml
     environment:
       - INFLUXDB_DB=db0
       - INFLUXDB_ADMIN_USER=admin
