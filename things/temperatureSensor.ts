@@ -7,8 +7,8 @@ export class TemperatureSensor extends Sensor {
      */
     temperature: number;
 
-    constructor() {
-        super();
+    constructor(name: string) {
+        super(name);
         this.temperature = NaN;
     }
 

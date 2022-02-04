@@ -6,8 +6,8 @@ import { saveDeviceState, setUp } from "./db";
 import { Devices } from "./types";
 
 const devices: Devices = {
-    sls: [new StreetLamp(), new StreetLamp()],
-    wss: [new WeatherStation()],
+    sls: [new StreetLamp("sl-1"), new StreetLamp("sl-2")],
+    wss: [new WeatherStation("ws-1")],
 };
 
 export async function startServer(): Promise<void> {
@@ -26,31 +26,4 @@ export async function startServer(): Promise<void> {
         ]);
         saveDeviceState(devices);
     }, 0.1 * 1000);
-
-    io.on("connection", (socket) => {
-        console.log("New connection:", socket.id);
-
-        socket.emit("hello", "world");
-
-        socket.on("ping", (data) => {
-            console.log("ping", data);
-            socket.emit("pong", data);
-        });
-
-        socket.on("addStreetlamp", (data) => {
-            devices.sls.push(new StreetLamp());
-            socket.emit("streetLampAdded");
-        });
-
-        socket.on("removeStreetlamp", (data) => {
-            devices.sls.pop();
-            socket.emit("streetLampRemoved");
-        });
-        setInterval(async () => {
-            socket.emit("tick", devices);
-        }, 0.1 * 1000);
-    });
-    const port = parseInt(process.env.PORT || "8080");
-    io.listen(port);
-    console.log(`Listening on port ${port}`);
 }

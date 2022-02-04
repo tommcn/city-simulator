@@ -88,14 +88,17 @@ export async function saveDeviceState(devices: Devices) {
         for (const ws of devices.wss) {
             const point = new Point("weather_station")
                 .floatField("temperature", ws.temperature)
-                .tag("id", ws._id);
+                .tag("id", ws._id)
+                .tag("name", ws.name);
 
             writeApi.writePoint(point);
         }
         for (const sl of devices.sls) {
             const point = new Point("streetlight")
                 .booleanField("on", sl.on)
-                .tag("id", sl._id);
+                .tag("id", sl._id)
+                .tag("name", sl.name);
+
             writeApi.writePoint(point);
         }
 

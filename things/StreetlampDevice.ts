@@ -5,10 +5,10 @@ export class StreetLamp extends Device {
     sensors: PresenceSensor[];
     on: boolean;
 
-    constructor() {
-        super();
-        this.sensors = [new PresenceSensor()] as PresenceSensor[];
-        this.actors = [new LightActor()] as LightActor[];
+    constructor(name: string) {
+        super(name);
+        this.sensors = [new PresenceSensor(`${name}-ps`)] as PresenceSensor[];
+        this.actors = [new LightActor(`${name}-la`)] as LightActor[];
         this.on = false;
     }
 

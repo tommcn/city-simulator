@@ -6,9 +6,9 @@ export class WeatherStation extends Device {
     sensors: TemperatureSensor[];
     temperature: number;
 
-    constructor() {
-        super();
-        this.sensors = [new TemperatureSensor()] as TemperatureSensor[];
+    constructor(name: string) {
+        super(name);
+        this.sensors = [new TemperatureSensor("ts-1")] as TemperatureSensor[];
         this.actors = [];
         this.temperature = NaN;
     }

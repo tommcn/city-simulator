@@ -4,8 +4,8 @@ import { Actor } from "./thing";
 export class LightActor extends Actor {
     on: boolean;
 
-    constructor() {
-        super();
+    constructor(name: string) {
+        super(name);
         this.on = false;
     }
 

@@ -2,8 +2,10 @@ import { v4 as uuidv4 } from "uuid";
 
 export abstract class Thing {
     _id: string;
+    name: string;
 
-    constructor() {
+    constructor(name: string) {
+        this.name = name;
         this._id = uuidv4();
     }
 
@@ -11,16 +13,16 @@ export abstract class Thing {
 }
 
 export abstract class Sensor extends Thing {
-    constructor() {
-        super();
+    constructor(name: string) {
+        super(name);
     }
 
     public abstract get value(): number | boolean;
 }
 
 export abstract class Actor extends Thing {
-    constructor() {
-        super();
+    constructor(name: string) {
+        super(name);
     }
 }
 
@@ -28,8 +30,8 @@ export abstract class Device extends Thing {
     actors: Actor[];
     sensors: Sensor[];
 
-    constructor() {
-        super();
+    constructor(name: string) {
+        super(name);
         this.actors = [];
         this.sensors = [];
     }

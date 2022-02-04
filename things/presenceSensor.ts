@@ -7,8 +7,8 @@ export class PresenceSensor extends Sensor {
      */
     presence: boolean;
 
-    constructor() {
-        super();
+    constructor(name: string) {
+        super(name);
         this.presence = false;
     }
 
