@@ -1,4 +1,3 @@
-import { sleep } from "./helpers";
 import { Sensor } from "./thing";
 
 export class PresenceSensor extends Sensor {
@@ -15,9 +14,6 @@ export class PresenceSensor extends Sensor {
     async tick(): Promise<boolean> {
         const value = Math.random() < 0.5;
         this.presence = value;
-
-        // await sleep(1 * 1000); // Busy work
-
         return true;
     }
 

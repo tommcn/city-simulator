@@ -38,3 +38,7 @@ export async function initDevices() {
         console.log("Created street lamp:", created.name);
     }
 }
+
+(async () => {
+    await initDevices();
+})();

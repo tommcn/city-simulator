@@ -1,4 +1,3 @@
-import { sleep } from "./helpers";
 import { Sensor } from "./thing";
 
 export class TemperatureSensor extends Sensor {

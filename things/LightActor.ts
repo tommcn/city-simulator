@@ -1,4 +1,3 @@
-import { sleep } from "./helpers";
 import { Actor } from "./thing";
 
 export class LightActor extends Actor {

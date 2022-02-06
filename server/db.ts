@@ -5,7 +5,6 @@ import {
     SetupAPI,
     SigninAPI,
 } from "@influxdata/influxdb-client-apis";
-import { write } from "fs";
 
 const InfluxURL = process.env.RUNNING_IN_CONTAINER
     ? "http://influxdb:8086"
