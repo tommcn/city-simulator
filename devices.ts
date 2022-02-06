@@ -34,7 +34,7 @@ export async function initDevices() {
         const created = new StreetLamp(sl.name);
         setInterval(async () => {
             await created.tick();
-        });
+        }, interval * 1000);
         console.log("Created street lamp:", created.name);
     }
 }

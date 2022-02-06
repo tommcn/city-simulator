@@ -4,10 +4,20 @@ services:
     build: .
     environment:
       - PORT=8080
+      - RUNNING_IN_CONTAINER=true
     ports:
       - 8080:8080
     depends_on:
       - influxdb
+      - mqtt
+
+  mqtt:
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      -  ./config/mosquitto:/mosquitto/config
 
   influxdb:
     image: influxdb:latest

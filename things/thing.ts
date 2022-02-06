@@ -1,4 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
+import * as mqtt from "mqtt";
+
+const MQTTurl = process.env.RUNNING_IN_CONTAINER
+    ? "mqtt://mqtt"
+    : "mqtt://localhost";
 
 export abstract class Thing {
     _id: string;
@@ -27,13 +32,33 @@ export abstract class Actor extends Thing {
 }
 
 export abstract class Device extends Thing {
+    type: string | undefined;
     actors: Actor[];
     sensors: Sensor[];
+    client: mqtt.Client;
 
     constructor(name: string) {
         super(name);
         this.actors = [];
         this.sensors = [];
+        const client = mqtt.connect(MQTTurl);
+        this.client = client;
+    }
+
+    public abstract getDataToSend(): object;
+
+    private async send() {
+        const data = this.getDataToSend() as {
+            _id: string;
+            name: string;
+            [key: string]: string; // any additional data
+        };
+        data._id = this._id;
+        data.name = this.name;
+        this.client.publish(
+            `things/data/${this.type}/${this._id}`,
+            JSON.stringify(data)
+        );
     }
 
     public async tick(): Promise<boolean> {
@@ -44,6 +69,7 @@ export abstract class Device extends Thing {
         const unique = new Set(successes);
 
         await this.logic();
+        await this.send();
 
         return !unique.has(false);
     }

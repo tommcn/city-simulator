@@ -1,18 +1,22 @@
 import { InfluxDB, Point } from "@influxdata/influxdb-client";
+import * as mqtt from "mqtt";
 import {
     AuthorizationsAPI,
     SetupAPI,
     SigninAPI,
 } from "@influxdata/influxdb-client-apis";
-import { Devices } from "./types";
+import { write } from "fs";
 
-const org = "org";
-const bucket = "bucket";
-const url = process.env.RUNNING_IN_CONTAINER
+const InfluxURL = process.env.RUNNING_IN_CONTAINER
     ? "http://influxdb:8086"
     : "http://localhost:8086";
+
+const MQTTurl = process.env.RUNNING_IN_CONTAINER
+    ? "mqtt://mqtt"
+    : "mqtt://localhost";
+
 var token = undefined as string | undefined;
-var client = undefined as InfluxDB | undefined;
+var InfluxClient = undefined as InfluxDB | undefined;
 
 export async function setUp(
     username: string,
@@ -20,7 +24,7 @@ export async function setUp(
     org: string,
     bucket: string
 ) {
-    const setupApi = new SetupAPI(new InfluxDB({ url }));
+    const setupApi = new SetupAPI(new InfluxDB({ url: InfluxURL }));
     try {
         const res = await setupApi.postSetup({
             body: {
@@ -30,11 +34,11 @@ export async function setUp(
                 password,
             },
         });
-        console.log(`InfluxDB '${url}' is now onboarded.`);
+        console.log(`InfluxDB '${InfluxURL}' is now onboarded.`);
         token = res.auth?.token;
     } catch (err) {
         console.log("Onboarding failed, signing in instead.");
-        const signinAPI = new SigninAPI(new InfluxDB({ url }));
+        const signinAPI = new SigninAPI(new InfluxDB({ url: InfluxURL }));
         const cookies = [] as (string | undefined)[];
         await signinAPI.postSignin(
             {
@@ -58,7 +62,9 @@ export async function setUp(
             }
         );
         const session = { headers: { cookie: cookies.join("; ") } };
-        const authorizationAPI = new AuthorizationsAPI(new InfluxDB({ url }));
+        const authorizationAPI = new AuthorizationsAPI(
+            new InfluxDB({ url: InfluxURL })
+        );
         const authorizations = await authorizationAPI.getAuthorizations(
             {},
             session
@@ -67,8 +73,8 @@ export async function setUp(
             token = authorizations.authorizations[0].token;
         }
     }
-    client = new InfluxDB({
-        url: url,
+    InfluxClient = new InfluxDB({
+        url: InfluxURL,
         token,
     });
     console.log("Got token and created InfluxDB client.");
@@ -78,34 +84,46 @@ export async function setUp(
         "See https://docs.influxdata.com/influxdb/v2.0/tools/grafana/#configure-grafana-to-use-flux for information regarding connecting InfluxDB to Grafana"
     );
     console.log("=".repeat(56));
-}
 
-export async function saveDeviceState(devices: Devices) {
-    if (client !== undefined) {
-        const writeApi = client.getWriteApi(org, bucket);
-        writeApi.useDefaultTags({ host: "city1" });
+    const MQTTClient = mqtt.connect(MQTTurl);
+    MQTTClient.on("connect", () => {
+        console.log("Connected to MQTT broker.");
+        MQTTClient.subscribe("things/data/#", { qos: 2 }, (err, granted) => {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log(
+                    "Subscribed to MQTT topic with QoS",
+                    granted[0].qos
+                );
+            }
+        });
+        MQTTClient.on("message", (topic: string, msg: Buffer) => {
+            const type = topic.split("/")[2];
+            const data = JSON.parse(msg.toString());
 
-        for (const ws of devices.wss) {
-            const point = new Point("weather_station")
-                .floatField("temperature", ws.temperature)
-                .tag("id", ws._id)
-                .tag("name", ws.name);
+            if (InfluxClient !== undefined) {
+                const writeApi = InfluxClient.getWriteApi(org, bucket);
+                writeApi.useDefaultTags({ host: "city1" });
 
-            writeApi.writePoint(point);
-        }
-        for (const sl of devices.sls) {
-            const point = new Point("streetlight")
-                .booleanField("on", sl.on)
-                .tag("id", sl._id)
-                .tag("name", sl.name);
+                if (type === "weather_station") {
+                    const point = new Point("weather_station")
+                        .floatField("temperature", data.temperature)
+                        .tag("id", data._id)
+                        .tag("name", data.name);
 
-            writeApi.writePoint(point);
-        }
+                    writeApi.writePoint(point);
+                } else if (type === "streetlamp") {
+                    const point = new Point("streetlight")
+                        .booleanField("on", data.on)
+                        .tag("id", data._id)
+                        .tag("name", data.name);
 
-        await writeApi.close();
-    } else {
-        console.log(
-            "No client was authenticated, data was not sent to InfluxDB"
-        );
-    }
+                    writeApi.writePoint(point);
+                } else {
+                    console.log("unknown");
+                }
+            }
+        });
+    });
 }

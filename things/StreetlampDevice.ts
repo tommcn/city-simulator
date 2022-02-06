@@ -1,4 +1,9 @@
 import { Device, PresenceSensor, LightActor } from ".";
+interface StreetLampData {
+    on: boolean;
+    numSensors: number;
+    numLights: number;
+}
 
 export class StreetLamp extends Device {
     actors: LightActor[];
@@ -10,6 +15,7 @@ export class StreetLamp extends Device {
         this.sensors = [new PresenceSensor(`${name}-ps`)] as PresenceSensor[];
         this.actors = [new LightActor(`${name}-la`)] as LightActor[];
         this.on = false;
+        this.type = "streetlamp";
     }
 
     public async logic(): Promise<boolean> {
@@ -29,5 +35,12 @@ export class StreetLamp extends Device {
             }
         }
         return true;
+    }
+    public getDataToSend(): StreetLampData {
+        return {
+            on: this.on,
+            numSensors: this.sensors.length,
+            numLights: this.actors.length,
+        };
     }
 }
