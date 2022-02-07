@@ -1,4 +1,4 @@
-import { Sensor } from "./thing";
+import { Sensor } from "..";
 
 export class TemperatureSensor extends Sensor {
     /**

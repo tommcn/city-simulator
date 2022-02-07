@@ -1,4 +1,5 @@
-import { Device, TemperatureSensor } from ".";
+import { Device } from ".";
+import { TemperatureSensor } from "./sensors";
 import { average } from "./helpers";
 
 interface WeatherStationData {

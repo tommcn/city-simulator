@@ -1,4 +1,5 @@
-import { Device, PresenceSensor, LightActor } from ".";
+import { Device, LightActor } from ".";
+import { PresenceSensor } from "./sensors";
 interface StreetLampData {
     on: boolean;
     numSensors: number;
