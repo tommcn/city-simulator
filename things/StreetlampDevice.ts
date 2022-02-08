@@ -1,10 +1,6 @@
+import { StreetLampData } from "thing";
 import { Device, LightActor } from ".";
 import { PresenceSensor } from "./sensors";
-interface StreetLampData {
-    on: boolean;
-    numSensors: number;
-    numLights: number;
-}
 
 export class StreetLamp extends Device {
     actors: LightActor[];

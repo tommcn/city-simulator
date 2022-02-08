@@ -1,33 +1,39 @@
 import { Device } from ".";
-import { TemperatureSensor } from "./sensors";
+import { HumiditySensor, TemperatureSensor } from "./sensors";
 import { average } from "./helpers";
-
-interface WeatherStationData {
-    temperature: number;
-    numSensors: number;
-}
+import { WeatherStationData, WeatherStationSensors } from "thing";
 
 export class WeatherStation extends Device {
     actors: [];
-    sensors: TemperatureSensor[];
+    sensors: WeatherStationSensors;
     temperature: number;
+    humidity: number;
 
     constructor(name: string) {
         super(name);
-        this.sensors = [new TemperatureSensor("ts-1")] as TemperatureSensor[];
+        this.sensors = {
+            temperature: [new TemperatureSensor("ts-1")],
+            humidity: [new HumiditySensor("hs-1")],
+        };
         this.actors = [];
         this.temperature = NaN;
         this.type = "weather_station";
     }
 
     public async logic(): Promise<boolean> {
-        this.temperature = average(this.sensors.map((sensor) => sensor.value));
+        this.temperature = average(
+            this.sensors.temperature.map((sensor) => sensor.value)
+        );
+        this.humidity = average(
+            this.sensors.humidity.map((sensor) => sensor.value)
+        );
         return true;
     }
     public getDataToSend(): WeatherStationData {
         return {
             temperature: this.temperature,
-            numSensors: this.sensors.length,
+            humidity: this.humidity,
+            numSensors: Object.keys(this.sensors).flat().length,
         };
     }
 }

@@ -12,7 +12,7 @@ export class TemperatureSensor extends Sensor {
     }
 
     async tick(): Promise<boolean> {
-        const value = Math.floor(Math.random() * 100);
+        const value = Math.floor(Math.random() * 20);
         this.temperature = value;
 
         // await sleep(1 * 1000); // Busy work

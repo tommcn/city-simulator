@@ -5,6 +5,10 @@ import {
     SetupAPI,
     SigninAPI,
 } from "@influxdata/influxdb-client-apis";
+import {
+    WeatherStationInformationSent,
+    StreetLampInformationSent,
+} from "thing";
 
 const InfluxURL = process.env.RUNNING_IN_CONTAINER
     ? "http://influxdb:8086"
@@ -99,20 +103,26 @@ export async function setUp(
         });
         MQTTClient.on("message", (topic: string, msg: Buffer) => {
             const type = topic.split("/")[2];
-            const data = JSON.parse(msg.toString());
 
             if (InfluxClient !== undefined) {
                 const writeApi = InfluxClient.getWriteApi(org, bucket);
                 writeApi.useDefaultTags({ host: "city1" });
 
                 if (type === "weather_station") {
+                    const data = JSON.parse(
+                        msg.toString()
+                    ) as WeatherStationInformationSent;
                     const point = new Point("weather_station")
                         .floatField("temperature", data.temperature)
+                        .floatField("humidity", data.humidity)
                         .tag("id", data._id)
                         .tag("name", data.name);
 
                     writeApi.writePoint(point);
                 } else if (type === "streetlamp") {
+                    const data = JSON.parse(
+                        msg.toString()
+                    ) as StreetLampInformationSent;
                     const point = new Point("streetlight")
                         .booleanField("on", data.on)
                         .tag("id", data._id)

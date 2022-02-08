@@ -1,5 +1,5 @@
 import { readFile } from "fs/promises";
-import YAML from "yaml";
+import * as YAML from "yaml";
 
 import { StreetLamp, WeatherStation } from "./things";
 

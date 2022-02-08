@@ -1,5 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
 import * as mqtt from "mqtt";
+import {
+    WeatherStationInformationSent,
+    StreetLampInformationSent,
+    WeatherStationSensors,
+} from "thing";
 
 const MQTTurl = process.env.RUNNING_IN_CONTAINER
     ? "mqtt://mqtt"
@@ -34,7 +39,7 @@ export abstract class Actor extends Thing {
 export abstract class Device extends Thing {
     type: string | undefined;
     actors: Actor[];
-    sensors: Sensor[];
+    sensors: Sensor[] | WeatherStationSensors;
     client: mqtt.Client;
 
     constructor(name: string) {
@@ -48,11 +53,9 @@ export abstract class Device extends Thing {
     public abstract getDataToSend(): object;
 
     private async send() {
-        const data = this.getDataToSend() as {
-            _id: string;
-            name: string;
-            [key: string]: string; // any additional data
-        };
+        const data = this.getDataToSend() as
+            | WeatherStationInformationSent
+            | StreetLampInformationSent;
         data._id = this._id;
         data.name = this.name;
         this.client.publish(
@@ -62,7 +65,13 @@ export abstract class Device extends Thing {
     }
 
     public async tick(): Promise<boolean> {
-        const things = [...this.sensors, ...this.actors];
+        const things = [
+            ...Object.values(this.sensors).reduce(
+                (acc, val) => acc.concat(val),
+                []
+            ),
+            ...this.actors,
+        ];
         const successes = await Promise.all(
             things.map((thing) => thing.tick())
         );
