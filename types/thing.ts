@@ -1,4 +1,8 @@
-import { HumiditySensor, TemperatureSensor } from "../things/sensors";
+import {
+    HumiditySensor,
+    PresenceSensor,
+    TemperatureSensor,
+} from "../things/sensors";
 
 export interface DeviceData {
     _id: string;
@@ -10,6 +14,9 @@ export interface WeatherStationSensors {
     humidity: HumiditySensor[];
 }
 
+export interface StreetLampSensors {
+    presence: PresenceSensor[];
+}
 export interface WeatherStationData {
     temperature: number;
     humidity: number;
