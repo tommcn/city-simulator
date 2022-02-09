@@ -1,3 +1,5 @@
+# For testing purposes. In a real deployment you would init the devices inm devices.ts
+
 devices:
   weather_stations:
     - name: Weather Station 1
