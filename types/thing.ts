@@ -38,3 +38,5 @@ export interface StreetLampInformationSent extends StreetLampData, DeviceData {}
 export type InformationSent =
     | WeatherStationInformationSent
     | StreetLampInformationSent;
+
+export type Sensors = WeatherStationSensors | StreetLampSensors;

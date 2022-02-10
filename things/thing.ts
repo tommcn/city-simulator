@@ -6,6 +6,7 @@ import {
     WeatherStationSensors,
     StreetLampSensors,
     InformationSent,
+    Sensors,
 } from "thing";
 
 const MQTTurl = process.env.RUNNING_IN_CONTAINER
@@ -41,7 +42,7 @@ export abstract class Actor extends Thing {
 export abstract class Device extends Thing {
     type: string | undefined;
     actors: Actor[];
-    sensors: StreetLampSensors | WeatherStationSensors;
+    sensors: Sensors;
     client: mqtt.Client;
 
     constructor(name: string) {
