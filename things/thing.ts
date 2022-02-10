@@ -5,6 +5,7 @@ import {
     StreetLampInformationSent,
     WeatherStationSensors,
     StreetLampSensors,
+    InformationSent,
 } from "thing";
 
 const MQTTurl = process.env.RUNNING_IN_CONTAINER
@@ -54,9 +55,7 @@ export abstract class Device extends Thing {
     public abstract getDataToSend(): object;
 
     private async send() {
-        const data = this.getDataToSend() as
-            | WeatherStationInformationSent
-            | StreetLampInformationSent;
+        const data = this.getDataToSend() as InformationSent;
         data._id = this._id;
         data.name = this.name;
         this.client.publish(
