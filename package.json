@@ -17,7 +17,7 @@
         "@influxdata/influxdb-client-apis": "^1.22.0",
         "mqtt": "^4.3.4",
         "uuid": "^8.3.2",
-        "yaml": "^1.10.2"
+        "yaml": "^2.2.2"
     },
     "devDependencies": {
         "@types/node": "^17.0.13",
